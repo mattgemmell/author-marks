@@ -51,7 +51,7 @@ If you're using [Octopress](http://octopress.org), you already have jQuery, so d
 
 ## CSS
 
-Author Marks works very simply by adding (or removing) a given CSS class to all `mark` tags in your document.
+Author Marks works very simply by adding (or removing) a given CSS class to any `mark` tags in your document which have the `author-mark` CSS class applied.
 
 You'll want to add these CSS styles:
 
@@ -61,7 +61,7 @@ You'll want to add these CSS styles:
 
 ## Creating marks in your content
 
-Just use the HTML5 `mark` tag: `<mark>An important remark</mark>`.
+Just use the HTML5 `mark` tag with the `author-mark` class applied: `<mark class="author-mark">An important remark</mark>`.
 
 
 ## Toggling links
