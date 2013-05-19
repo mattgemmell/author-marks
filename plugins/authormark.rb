@@ -8,7 +8,7 @@
 # authormarks.js by Matt Gemmell
 # authormark.rb  by Parker Moore
 
-class Mark < Liquid::Tag
+class AuthorMark < Liquid::Tag
   def initialize(tag, text, tokens)
     @text = text.strip
   end
