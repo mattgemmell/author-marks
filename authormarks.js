@@ -3,7 +3,7 @@ Author Marks script by Matt Gemmell
 Web: http://mattgemmell.com/
 Twitter: http://twitter.com/mattgemmell
 
-Use the HTML5 <mark>...</mark> tag to indicate important, quotable or key points. This script allows toggling highlights for those sections, by adding or removing the CSS "marks-highlighted" class from each <mark> tag.
+Use the HTML5 <mark>...</mark> tag (with CSS class "author-mark" applied) to indicate important, quotable or key points. This script allows toggling highlights for those sections, by adding or removing the CSS "marks-highlighted" class from each <mark> tag with the "author-mark" CSS class applied.
 
 This script expects at least one marks-toggling link (<a href="...">...</a>) to be present in the document, using the CSS "toggle-marks-highlight" class. The toggling link(s) themselves will also have the "marks-highlighted" class added or removed when toggling occurs.
 
@@ -28,7 +28,7 @@ function setupAuthorMarks() {
 
 function toggleAuthorMarks() {
 	// Locate marks and toggling links.
-	var marks = $("mark");
+	var marks = $(".author-mark");
 	var toggles = $(".toggle-marks-highlight");
 	
 	// Add or remove highlighting CSS class depending on current status.
