@@ -10,46 +10,33 @@
 (function (global) {
     "use strict";
 
-    /* BUILT-IN EXTENSIONS
-     * =================== */
+    /* UTILITY METHODS
+     * =============== */
+    var _ = {
+        // Add Event
+        // ---------
+        // Cross browser event binding
+        //
+        addEvent:  function (element, event, callback) {
+            if (element.addEventListener) {
+                element.addEventListener(event, callback, false);
+            } else if (element.attachEvent) {
+                element.attachEvent('on' + event, callback);
+            }
+        },
 
-    // Add Event
-    // ---------
-    // Cross browser event binding
-    //
-    Object.prototype.addEvent = function(event, callback) {
-        if (this.addEventListener) {
-            this.addEventListener(event, callback, false);
-        } else if (this.attachEvent) {
-            this.attachEvent('on' + event, callback);
+        // Generic ForEach Method
+        // ----------------------
+        // Can be attached to the prototype of any object with
+        // a `.length` property to provide an `Array.prototype.forEach` like
+        // method
+        //
+        forEach: function (element, callback) {
+            for(var i = 0; i < element.length; i++) {
+                callback(element[i]);
+            }
         }
     };
-
-    // Generic ForEach Method
-    // ----------------------
-    // Can be attached to the prototype of any object with
-    // a `.length` property to provide an `Array.prototype.forEach` like
-    // method
-    //
-    var forEachMethod = function(callback) {
-        for(var i = 0; i < this.length; i++) {
-            callback(this[i]);
-        }
-    };
-
-    // Attach `forEach` method to NodeList (if it exists)
-    // WebKit
-    //
-    if (typeof(NodeList) !== 'undefined') {
-        NodeList.prototype.forEach = forEachMethod;
-    }
-
-    // Attach `forEach` method to HTMLCollection
-    // Mozilla
-    //
-    if (typeof(HTMLCollection) !== 'undefined') {
-        HTMLCollection.prototype.forEach = forEachMethod;
-    }
 
     /* AUTHORMARKS CLASS DEFINITION
      * ============================ */
@@ -65,7 +52,9 @@
         this.toggle_links = document.getElementsByClassName('toggle-marks-highlight');
         this.author_marks = document.getElementsByClassName('author-mark');
 
-        this.init();
+        if (this.author_marks.length > 0) {
+            this.init();
+        }
 
         return this;
     }
@@ -75,9 +64,13 @@
     // Initial event bindings
     //
     AuthorMarks.prototype.init = function () {
-        var _that = this;
-        this.toggle_links.forEach(function (toggleLink) {
-            toggleLink.addEvent('click', function (event) { _that.toggleAuthorMarks(event); });
+        var that = this;
+        _.forEach(this.toggle_links, function (toggleLink) {
+            if (toggleLink.style.display === '') {
+                toggleLink.style.display = 'inline';
+            }
+
+            _.addEvent(toggleLink, 'click', function (event) { that.toggleAuthorMarks(event); });
         });
     };
 
@@ -109,11 +102,11 @@
     //
     AuthorMarks.prototype.showAuthorMarks = function () {
         var that = this;
-        this.author_marks.forEach(function (mark) {
+        _.forEach(this.author_marks, function (mark) {
             mark.className = mark.className + ' ' + that.highlighted_class;
         });
 
-        this.toggle_links.forEach(function (link) {
+        _.forEach(this.toggle_links, function (link) {
             link.className = link.className + ' ' + that.highlighted_class;
             link.innerHTML = 'Hide Author Marks';
         });
@@ -126,11 +119,11 @@
     //
     AuthorMarks.prototype.hideAuthorMarks = function () {
         var that = this;
-        this.author_marks.forEach(function (mark) {
+        _.forEach(this.author_marks, function (mark) {
             mark.className = mark.className.replace(new RegExp('\\b' + that.highlighted_class + '\\b'), '');
         });
 
-        this.toggle_links.forEach(function (link) {
+        _.forEach(this.toggle_links, function (link) {
             link.className = link.className.replace(new RegExp('\\b' + that.highlighted_class + '\\b'), '');
             link.innerHTML = 'Show Author Marks';
         });
@@ -138,7 +131,7 @@
 
     /* CREATE AND EXPOSE AUTHORMARKS
      * ============================= */
-    global.addEvent('load', function() {
+    _.addEvent(global, 'load', function() {
         this.AuthorMarks = new AuthorMarks();
     });
 })(this);
